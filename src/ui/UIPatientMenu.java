@@ -1,14 +1,18 @@
 package ui;
 
+import static ui.UIMenu.patientLogged;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
 import model.AvailableAppointment;
+import model.Data;
 import model.Doctor;
 import model.Nurse;
+import model.Patient;
 
 public class UIPatientMenu {
+
+    public static ArrayList <Patient> patientsWithDoctorAppointments = new ArrayList<>();
+    public static ArrayList <Patient> patientsWithNurceAppointments = new ArrayList<>();
 
     public static void showPatientMenu() {
         int response = 0;
@@ -21,6 +25,7 @@ public class UIPatientMenu {
 
             Scanner sc = new Scanner(System.in);
             response = Integer.valueOf(sc.nextLine());
+            sc.close();
 
             switch (response) {
                 case 1:
@@ -49,6 +54,7 @@ public class UIPatientMenu {
             System.out.println("0. Return");
             Scanner sc = new Scanner(System.in);
             dateType = Integer.valueOf(sc.nextLine());
+            sc.close();
         } while (dateType == 0);
 
         switch (dateType) {
@@ -64,131 +70,92 @@ public class UIPatientMenu {
     }
 
     private static void showAddDoctorAppointment() {
-        int response = 0;
-        do {
-            System.out.println("::Book a Doctor appointment");
-            //Numeración de la lista de fechas
-            //Integer del segundo map -> Indice de la fecha seleccionada
-            //[Doctors]
-            //1. -doctor1
-            //1. fecha 1
-            //2. fecha 2...
-            //2. doctor2 ...
-            Map<Integer, Map<Integer, Doctor>> doctors = new TreeMap<>();
-            int k = 0;
-            for (int i = 0; i < UIDoctorMenu.doctorsAvailableAppointments.size(); i++) {
-                //se crea un array con todas las citas de los doctores que se enceiuntran en el array doctorsAvailableAppointments
-                //ArrayList<Doctor.AvailableAppointment> avalableAppointments =
-                ArrayList<AvailableAppointment> avalableAppointments
-                        = UIDoctorMenu.doctorsAvailableAppointments.get(i).getAvailableAppointments();
-                Map<Integer, Doctor> doctorAppointments = new TreeMap<>();
 
-                for (int j = 0; j < avalableAppointments.size(); j++) {
-                    k++;
-                    System.out.println(k + ". " + avalableAppointments.get(j).getDate());
-                    //se agregan las citas disponibles a los Map
-                    doctorAppointments.put(Integer.valueOf(j), UIDoctorMenu.doctorsAvailableAppointments.get(i));
-                    doctors.put(Integer.valueOf(k), doctorAppointments);
+        System.out.println("\n::Available Doctors \nPlease Select a Doctor");
+        Doctor doctorSelected = new Doctor();
+        AvailableAppointment availableAppoint = new AvailableAppointment();
+         
+        int j = 0;
+        for (Doctor doctor : Data.doctors) {
+            j++;
+            System.out.println(j + ". Doctor: " + doctor.getName());
+        }
+        System.out.println("0. Return");
+        Scanner sc = new Scanner(System.in);        
+        int responseDoctor = Integer.valueOf(sc.nextLine());
+        sc.close();
 
-                }
-
-            }
-            Scanner sc = new Scanner(System.in);
-            int responseDateSelected = Integer.valueOf(sc.nextLine());
-
-            Map<Integer, Doctor> doctorAvailableSelected = doctors.get(responseDateSelected);
-            Integer indexDate = 0;
-            Doctor doctorSelected = new Doctor("", "");
-
-            for (Map.Entry<Integer, Doctor> doc : doctorAvailableSelected.entrySet()) {
-                indexDate = doc.getKey();
-                doctorSelected = doc.getValue();
-            }
-            System.out.println(". Doctor Selected: " + doctorSelected.getName() + "\n. Email: " + doctorSelected.getEmail()
-                    + "\n. Date: "
-                    + doctorSelected.getAvailableAppointments().get(indexDate).getDate()
-                    + "\n. Time: "
-                    + doctorSelected.getAvailableAppointments().get(indexDate).getTime());
-            System.out.println("Comfirm your appointment: \n1. Yes \n2. Change data");
-            response = Integer.valueOf(sc.nextLine());
-
-            if (response == 1) {
-                UIMenu.patientLogged.addAppointmentDoctors(
-                        doctorSelected,
-                        doctorSelected.getAvailableAppointments().get(indexDate).getDate(null),
-                        doctorSelected.getAvailableAppointments().get(indexDate).getTime());
+        if (responseDoctor == 0) {
                 showPatientMenu();
+        } else {
+            doctorSelected = Data.doctors.get(responseDoctor - 1);
+            System.out.println("\n::" + doctorSelected.getName() + " Available Appointmens Are:");
+            int k = 0;
+            for (AvailableAppointment availableAppointment: doctorSelected.getAvailableAppointments()) {
+                k++;
+                System.out.println(k + ". Date: " + availableAppointment.getDate()
+                        + " Time " + availableAppointment.getTime());
             }
-            System.out.println("Return to the patient menu");
-            showPatientMenu();
+        }
+        
+        System.out.println("0. Return");
 
-        } while (response != 0);
+        Scanner sc2 = new Scanner(System.in);
+        int responseDateSelected = Integer.valueOf(sc2.nextLine());
+        sc2.close();
+        if (responseDateSelected == 0) {
+            showPatientMenu();
+        }else{
+            availableAppoint = doctorSelected.getAvailableAppointments().get(responseDateSelected - 1);
+            patientLogged.addAppointmentDoctors(doctorSelected, availableAppoint.getDate(), availableAppoint.getTime());
+            System.out.println("Your appointment has been booked");
+            showPatientMenu();
+        }      
 
     }
 
     private static void showAddNurseAppointment() {
-        int responseNurse = 0;
-        int responseAppointement = 0;
-        int responseConfirm =0;
-        String date= "";
-        String time= "";
-        String name= "";
-        System.out.println("::Book a Nurce appointment");
-        Nurse nurseSelected = new Nurse("", "", "");
-        Scanner sc = new Scanner(System.in);
 
-        do {
-            System.out.println("Select a Nurse from the following list");
-            for (int i = 0; i < UINurseMenu.nurseAvailableAppointments.size(); i++) { 
-                int j = i+1;
-                System.out.println(j + ". " + UINurseMenu.nurseAvailableAppointments.get(i).getName());
+        System.out.println("\n::Available Nurces \nPlease Select a nurce");
+        Nurse nurseSelected = new Nurse();
+        AvailableAppointment availableAppoint = new AvailableAppointment();
+         
+        int j = 0;
+        for (Nurse nurce : Data.nurses) {
+            j++;
+            System.out.println(j + ". Nurce: " + nurce.getName());
+        }
+        System.out.println("0. Return");
+        Scanner sc = new Scanner(System.in);        
+        int responseNurce = Integer.valueOf(sc.nextLine());
+        sc.close();
 
-            }
-            System.out.println("0. Return");
-            
-            responseNurse = Integer.valueOf(sc.nextLine());
-
-            nurseSelected = UINurseMenu.nurseAvailableAppointments.get(responseNurse - 1);
-
-        } while (responseNurse == 0);
-        
-        do {
-            System.out.println("\nThe nurse :'" + UINurseMenu.nurseAvailableAppointments.get(responseNurse - 1).getName() + "' has the fallowing available appointments, select one of them please");
-            for (int i = 0; i < UINurseMenu.nurseAvailableAppointments.get(responseNurse - 1).getAvailableAppointments().size(); i++) {
-                int j = i + 1;
-                System.out.println(j + ". Date: " + UINurseMenu.nurseAvailableAppointments.get(responseNurse - 1).getAvailableAppointments().get(i).getDate());
-            }
-            System.out.println("0. Return");
-            responseAppointement = Integer.valueOf(sc.nextLine());
-            
-        } while (responseAppointement == 0);
-        
-        do {
-            date = nurseSelected.getAvailableAppointments().get(responseAppointement-1).getDate();
-            time = nurseSelected.getAvailableAppointments().get(responseAppointement-1).getTime();
-            name = nurseSelected.getName();
-            System.out.println("Your Nurse Appointment is: ");
-            System.out.println("Nurse: "+name);
-            System.out.println("Date: "+ date+" Time: "+time);
-            System.out.println("\nPlease confirm your appointment.");
-            System.out.println("1. yes"+"\n2. No, Return to select Nurse");
-            
-            responseConfirm = Integer.valueOf(sc.nextLine());
-            
-            
-            
-            if (responseConfirm == 1) {
-                UIMenu.patientLogged.addAppointmentNurses(
-                        nurseSelected,
-                        nurseSelected.getAvailableAppointments().get(responseAppointement-1).getDate(null),
-                        nurseSelected.getAvailableAppointments().get(responseAppointement-1).getTime());
+        if (responseNurce == 0) {
                 showPatientMenu();
+        } else {
+            nurseSelected = Data.nurses.get(responseNurce - 1);
+            System.out.println("\n::" + nurseSelected.getName() + " Available Appointmens Are:");
+            int k = 0;
+            for (AvailableAppointment availableAppointment: nurseSelected.getAvailableAppointments()) {
+                k++;
+                System.out.println(k + ". Date: " + availableAppointment.getDate()
+                        + " Time " + availableAppointment.getTime());
             }
-            System.out.println("Return to the patient menu");
+        }
+        
+        System.out.println("0. Return");
+
+        Scanner sc2 = new Scanner(System.in);
+        int responseDateSelected = Integer.valueOf(sc2.nextLine());
+        sc2.close();
+        if (responseDateSelected == 0) {
             showPatientMenu();
-            
-            
-        } while (responseConfirm ==0);
+        }else{
+            availableAppoint = nurseSelected.getAvailableAppointments().get(responseDateSelected - 1);
+            patientLogged.addAppointmentNurses(nurseSelected, availableAppoint.getDate(), availableAppoint.getTime());
+            System.out.println("Your appointment has been booked");
+            showPatientMenu();
+        }      
 
     }
 

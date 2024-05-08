@@ -18,6 +18,9 @@ public class AvailableAppointment  {
     private String time;
     SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
 
+    public AvailableAppointment() {
+    }
+
     public AvailableAppointment(String date, String time) {
         try {
             this.date = format.parse(date);
@@ -27,6 +30,8 @@ public class AvailableAppointment  {
 
         this.time = time;
     }
+
+    
 
     public int getId_available_appointment() {
         return id_available_appointment;

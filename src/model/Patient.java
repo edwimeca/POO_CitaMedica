@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -16,6 +17,7 @@ public class Patient extends User{
     private String birthday;
     private String blood;
     private double weight, height;
+    SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
     
     private ArrayList<AppointmentDoctor> appointmentDoctors = new ArrayList<>();
     private ArrayList<AppointmentNurse> appointmentNurses = new ArrayList<>();
@@ -24,15 +26,27 @@ public class Patient extends User{
         return appointmentDoctors;
     }
 
-    public void addAppointmentDoctors(Doctor doctor, Date date, String time) {
+    public void addAppointmentDoctors(Doctor doctor, String date, String time) {
+        Date dateFormat = new Date();
+        try {
+            dateFormat = format.parse(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         AppointmentDoctor appointment_with_Doctor = new AppointmentDoctor(this, doctor);
-        appointment_with_Doctor.schedule(date, time);
+        appointment_with_Doctor.schedule(dateFormat, time);
         appointmentDoctors.add(appointment_with_Doctor);
     }
     
-     public void addAppointmentNurses(Nurse nurse, Date date, String time) {
+     public void addAppointmentNurses(Nurse nurse, String date, String time) {
+        Date dateFormat = new Date();
+        try {
+            dateFormat = format.parse(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         AppointmentNurse appointment_with_Nurse = new AppointmentNurse(this, nurse);
-        appointment_with_Nurse.schedule(date, time);
+        appointment_with_Nurse.schedule(dateFormat, time);
         appointmentNurses.add(appointment_with_Nurse);
     }
 
@@ -42,8 +56,7 @@ public class Patient extends User{
 
     public void setAppointmentNurses(ArrayList<AppointmentNurse> appointmentNurses) {
         this.appointmentNurses = appointmentNurses;
-    }
-    
+    }  
     
 
 

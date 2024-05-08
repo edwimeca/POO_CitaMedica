@@ -1,10 +1,7 @@
 
 package ui;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
-import model.AvailableAppointment;
 import model.Data;
 import model.Doctor;
 import model.Nurse;
@@ -32,6 +29,7 @@ public class UIMenu {
 
             Scanner sc = new Scanner(System.in);
             response = Integer.valueOf(sc.nextLine());
+            sc.close();
 
             switch (response){
                 case 1:
@@ -58,52 +56,19 @@ public class UIMenu {
                     System.out.println("Please select a correct answer");
             }
         }while (response != 0);
-        if (response==1) {
-            
-            
-        }
+       
     }
     
     private static void authUser(int userType){
         //userType =1 Doctor
         //userType =2 Patient
         //userType =3 Nurce
-        ArrayList<Doctor> doctors = new ArrayList<>();
-        doctors.addAll(Arrays.asList(Data.d1,Data.d2,Data.d3,Data.d4,Data.d5,Data.d6));
-        UIDoctorMenu.doctorsAvailableAppointments.addAll(Arrays.asList(Data.d1,Data.d2,Data.d3,Data.d4,Data.d5,Data.d6));
         
-        Data.d1.addObjAvailableAppointment(Data.a1);
-        Data.d1.addObjAvailableAppointment(Data.a2);
-        Data.d2.addObjAvailableAppointment(Data.a1);
-        Data.d2.addObjAvailableAppointment(Data.a2);
-        Data.d3.addObjAvailableAppointment(Data.a1);
-        Data.d3.addObjAvailableAppointment(Data.a2);
-        Data.d4.addObjAvailableAppointment(Data.a1);
-        Data.d4.addObjAvailableAppointment(Data.a2);
-        Data.d5.addObjAvailableAppointment(Data.a1);
-        Data.d6.addObjAvailableAppointment(Data.a2);
         
-        ArrayList<Patient> patients = new ArrayList<>();
-        patients.addAll(Arrays.asList(Data.p1,Data.p2,Data.p3,Data.p4,Data.p5,Data.p6));
-       
-        ArrayList<Nurse> nurses = new ArrayList<>();
-        nurses.addAll(Arrays.asList(Data.n1,Data.n2,Data.n3,Data.n4,Data.n5,Data.n6));
-        UINurseMenu.nurseAvailableAppointments.addAll(Arrays.asList(Data.n1,Data.n2,Data.n3,Data.n4,Data.n5,Data.n6));
-        
-        Data.n1.addObjAvailableAppointment(Data.a1);
-        Data.n1.addObjAvailableAppointment(Data.a2);
-        Data.n2.addObjAvailableAppointment(Data.a1);
-        Data.n2.addObjAvailableAppointment(Data.a2);
-        Data.n3.addObjAvailableAppointment(Data.a1);
-        Data.n3.addObjAvailableAppointment(Data.a2);
-        Data.n4.addObjAvailableAppointment(Data.a1);
-        Data.n4.addObjAvailableAppointment(Data.a2);
-        Data.n5.addObjAvailableAppointment(Data.a1);
-        Data.n5.addObjAvailableAppointment(Data.a2);
-        Data.n6.addObjAvailableAppointment(Data.a1);
-        Data.n6.addObjAvailableAppointment(Data.a2);
-       
-        
+        List<Doctor> doctors = Data.getDoctors();
+        List<Patient> patients = Data.getPatiens();
+        List<Nurse> nurses = Data.getNurses(); 
+           
         boolean emailcorrect = false;
         
         do {            
@@ -111,7 +76,7 @@ public class UIMenu {
             //String email = JOptionPane.showInputDialog("Insert your email: [a@a.com...]");
             Scanner sc = new Scanner(System.in);
             String email = sc.nextLine();
-            
+            sc.close();
             switch (userType) {
                 case 1:
                     for (Doctor d: doctors) {

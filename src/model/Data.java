@@ -4,11 +4,15 @@
  */
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author edwimeca
  */
 public class Data {
+
     public static Patient p1 = new Patient("p1", "p1.com");
     public static Patient p2 = new Patient("p2", "p2.com");
     public static Patient p3 = new Patient("p3", "p3.com");
@@ -37,10 +41,97 @@ public class Data {
     public static AvailableAppointment a5 = new AvailableAppointment("01/01/2028", "23:00");
     public static AvailableAppointment a6 = new AvailableAppointment("01/01/2028", "23:00");
     
+    public static List <AvailableAppointment> availableAppointments = new ArrayList<>();
+    public static List <Doctor> doctors = new ArrayList<>();
+    public static List <Patient> patiens = new ArrayList<>();
+    public static List <Nurse> nurses = new ArrayList<>();
     
-    
+    public static void createData (){
+        createAvailableAppointments();
+        createDoctors();
+        createPatients();
+        createNurses();
+    }
 
+
+
+    private static void createAvailableAppointments(){
+        availableAppointments.add(new AvailableAppointment("01/01/2028", "23:00"));
+        availableAppointments.add(new AvailableAppointment("01/01/2028", "23:00"));
+        availableAppointments.add(new AvailableAppointment("01/01/2028", "23:00"));
+        availableAppointments.add(new AvailableAppointment("01/01/2028", "23:00"));
+        availableAppointments.add(new AvailableAppointment("01/01/2028", "23:00"));
+        availableAppointments.add(new AvailableAppointment("01/01/2028", "23:00"));
+    }
+
+    private static void createDoctors(){
+        doctors.add(d1);
+        doctors.add(d2);
+        doctors.add(d3);
+        doctors.add(d4);
+        doctors.add(d5);
+        doctors.add(d6);            
+
+        for (Doctor doctor : doctors) {
+            doctor.addObjAvailableAppointment(a1);
+            doctor.addObjAvailableAppointment(a2);
+            doctor.addObjAvailableAppointment(a3);
+            doctor.addObjAvailableAppointment(a4);
+            doctor.addObjAvailableAppointment(a5);
+            doctor.addObjAvailableAppointment(a6);
+        }        
+    }
+
+    private static void createPatients(){
+        patiens.add(p1);
+        patiens.add(p2);
+        patiens.add(p3);
+        patiens.add(p4);
+        patiens.add(p5);
+        patiens.add(p6);
+
+        for (Patient patient : patiens) {
+            patient.addAppointmentDoctors(d1, "01/01/2028", "23:00");
+            patient.addAppointmentNurses(n1, "01/01/2028", "23:00");
+        }        
+    }
+
+    private static List<Nurse> createNurses(){
+        nurses.add(n1);
+        nurses.add(n2);
+        nurses.add(n3);
+        nurses.add(n4);
+        nurses.add(n5);
+        nurses.add(n6);
+
+
+
+        for (Nurse nurse : nurses) {
+            nurse.addObjAvailableAppointment(a1);
+            nurse.addObjAvailableAppointment(a2);
+            nurse.addObjAvailableAppointment(a3);
+            nurse.addObjAvailableAppointment(a4);
+            nurse.addObjAvailableAppointment(a5);
+            nurse.addObjAvailableAppointment(a6);
+        }
+        return nurses;   
+    }  
+
+    public static List<AvailableAppointment> getAvailableAppointments() {
+        return availableAppointments;
+    }
+
+    public static List<Doctor> getDoctors() {
+        return doctors;
+    }
+
+    public static List<Patient> getPatiens() {
+        return patiens;
+    }
+
+    public static List<Nurse> getNurses() {
+        return nurses;
+    }   
     
-    
-    
+        
 }

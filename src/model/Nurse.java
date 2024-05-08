@@ -13,7 +13,9 @@ import java.util.ArrayList;
 public class Nurse extends  User{
     private String speciality;
     private ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
-    
+
+    public Nurse() {
+    }    
 
     public Nurse(String name, String email, String specility) {
         super(name, email);

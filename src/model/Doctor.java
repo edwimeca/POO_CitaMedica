@@ -5,14 +5,13 @@ import java.util.ArrayList;
 
 public class Doctor extends User {
     private String speciality;
-    private ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
-    
-    
+    private ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();   
 
-
+    public Doctor() {}
+    
     public Doctor(String name, String email){
         super(name,email);
-        this.speciality=speciality;
+        
     }
 
     public String getSpeciality() {

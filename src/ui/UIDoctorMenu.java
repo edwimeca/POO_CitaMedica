@@ -3,6 +3,8 @@ package ui;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import model.AvailableAppointment;
 import model.Doctor;
 
 public class UIDoctorMenu {
@@ -22,13 +24,14 @@ public class UIDoctorMenu {
             
             Scanner sc = new Scanner(System.in);
             response = Integer.valueOf(sc.nextLine());
-            
+            sc.close();
+
             switch (response) {
                 case 1:
                     show_Add_Available_Appointments_Menu();
                     break;
                  case 2:
-                     checkDoctorAvailableAppointments(UIMenu.doctorLogged);
+                    showAvailableAppointmentsDoctor();
                     break;
                  case 0:
                     UIMenu.showMenu();
@@ -39,60 +42,58 @@ public class UIDoctorMenu {
             
         } while (response !=0);
     }
-    private static void show_Add_Available_Appointments_Menu(){
-        int response =0;
-        do {            
+
+    public static void show_Add_Available_Appointments_Menu() {
+
+        int responseDate = 0;
+        int responseTime = 0;
+        String date = "";
+        String time = "";
+        Scanner sc = new Scanner(System.in);
+        do {
             System.out.println(":: Add Available Appointment");
-            System.out.println(":: Select a Month");
-            for (int i = 0; i < 3; i++) {
-                int j = i+1;
-                System.out.println(j+". "+ UIMenu.MONTHS[i]);
-            }
-            System.out.println("0. Return");
-            
-            Scanner sc = new Scanner(System.in);
-            response = Integer.valueOf(sc.nextLine());
-            
-            if (response >0 && response<4) {
-                //1,2,3
-                int monthSelected = response;
-                System.out.println(monthSelected+". "+ UIMenu.MONTHS[monthSelected-1]+" Selected");
-                
-                int responseDate = 2;
-                String date;
-                
-                do {                    
-                    System.out.println("Insert the date available: [dd/mm/yyyy]");
-                    date= sc.nextLine();
-                    System.out.println("Your date is: "+date+ "\n1. Correct \n2. Change date");
-                    responseDate=Integer.valueOf(sc.nextLine());
-                } while (responseDate==2);
-                
-                
-                int responseTime =2;
-                String time;
-                do {
-                    System.out.println("Insert the time available: [00:00]");
-                    time = sc.nextLine();
-                    System.out.println("Your time is: "+time+ "\n1. Correct \n2. Change time");
-                    responseTime = Integer.valueOf(sc.nextLine());
-                } while (responseTime==2);
-                System.out.println("-------Successful add appointment-------");
-                UIMenu.doctorLogged.addAvailableAppointment(date, time);
-                checkDoctorAvailableAppointments(UIMenu.doctorLogged);
-                
-            } else if (response ==0){
-                showDoctorMenu();
-            }
-            
-        } while (response !=0);
+            System.out.println("Insert the date available: [dd/mm/yyyy]");
+            date = sc.nextLine();
+            System.out.println("Your date is: " + date + "\n1. Correct \n2. Change date");
+            responseDate = Integer.valueOf(sc.nextLine());
+
+        } while (responseDate == 2);
+
+        do {
+            System.out.println(":: Add Available Time");
+            System.out.println("Insert Available Time: [24:00]");
+            time = sc.nextLine();
+            System.out.println("Your Time is: " + time + "\n1. Correct \n2. Change date");
+            responseTime = Integer.valueOf(sc.nextLine());
+
+        } while (responseTime == 2);
+        sc.close();
+        System.out.println("-------Successful add appointment-------");
+        UIMenu.doctorLogged.addAvailableAppointment(date, time);
+        checkDoctorAvailableAppointments(UIMenu.doctorLogged);
+        showDoctorMenu();
     }
-    
     //Envia el doctor con cita al array de doctores con citas,  validando que no estuviera en el array antes de 
     private static void checkDoctorAvailableAppointments (Doctor doctor){
         if (doctor.getAvailableAppointments().size()>0 &&
                 !doctorsAvailableAppointments.contains(doctor)) {
             doctorsAvailableAppointments.add(doctor);
+        }
+    }
+
+    public static void showAvailableAppointmentsDoctor() {
+        if (UIMenu.doctorLogged.getAvailableAppointments().size() > 0) {
+            System.out.println("\n::Yours Available Appointmens Are:");
+            int j = 1;
+            for (AvailableAppointment appointment : UIMenu.doctorLogged.getAvailableAppointments()) {
+                
+                System.out.println(j + ". Date: " + appointment.getDate()
+                        + " Time " + appointment.getTime());
+                j++;
+            }
+
+        }else{
+            System.out.println("You do not have Available Appointments");
         }
     }
 }

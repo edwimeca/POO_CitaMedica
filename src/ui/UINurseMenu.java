@@ -32,6 +32,7 @@ public class UINurseMenu {
 
             Scanner sc = new Scanner(System.in);
             response = Integer.valueOf(sc.nextLine());
+            sc.close();
 
             switch (response) {
                 case 1:
@@ -65,7 +66,7 @@ public class UINurseMenu {
             System.out.println("Your date is: " + date + "\n1. Correct \n2. Change date");
             responseDate = Integer.valueOf(sc.nextLine());
 
-        } while (responseDate == 2);
+        } while (responseDate == 2);        
 
         do {
             System.out.println(":: Add Available Time");
@@ -75,6 +76,7 @@ public class UINurseMenu {
             responseTime = Integer.valueOf(sc.nextLine());
 
         } while (responseTime == 2);
+        sc.close();
         System.out.println("-------Successful add appointment-------");
         UIMenu.nurseLogged.addAvailableAppointment(date, time);
         checkNurseAvailableAppointments(UIMenu.nurseLogged);
